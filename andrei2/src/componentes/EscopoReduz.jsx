@@ -5,6 +5,12 @@ const EscopoReduz = () => {
         )
             
     }
+
+    <div>
+        <img src="./images.jpg" alt=""/>
+        <h1>TUNG TUNG TUNG SAHUR</h1>
+    </div>
+    
     return (
         <>
             <button onClick={() => alert("clicou")}>Clique aqui</button>

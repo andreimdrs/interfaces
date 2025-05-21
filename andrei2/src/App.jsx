@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      {/* <Contador/> */}
+      <Contador/>
       <Props nome={2} newname={"testestestetse"} atributo={"forte"}/>
     </>
   )

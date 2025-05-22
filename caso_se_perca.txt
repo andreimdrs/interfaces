@@ -2,3 +2,22 @@ npm create vite@latest meu-app -- --template react
 cd meu-app
 npm install
 npm run dev
+
+para bootstrap
+npm install bootstrap
+(em src/main.jsx) import 'bootstrap/dist/css/bootstrap.min.css';
+(em src/main.jsx) import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+(em vite.config.js)
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
+    },
+  },
+});

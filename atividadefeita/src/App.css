@@ -1,0 +1,121 @@
+/* src/App.css */
+
+/* Variáveis CSS para os temas */
+:root {
+  /* Cores do tema claro */
+  --light-bg: #f5f5f5;          /* Cor de fundo principal */
+  --light-text: #333;           /* Cor do texto */
+  --light-primary: #4CAF50;     /* Cor primária (botões) */
+  --light-secondary: #f8f9fa;   /* Cor de fundo secundária */
+  
+  /* Cores do tema escuro */
+  --dark-bg: #121212;           /* Cor de fundo principal */
+  --dark-text: #f5f5f5;         /* Cor do texto */
+  --dark-primary: #8bc34a;      /* Cor primária (botões) */
+  --dark-secondary: #1e1e1e;    /* Cor de fundo secundária */
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Modelo de caixa mais intuitivo */
+  transition: background-color 0.3s, color 0.3s; /* Transição suave para mudanças de tema */
+}
+
+/* Estilos gerais da aplicação */
+.app {
+  min-height: 100vh;   /* já ocupa toda a altura */
+  width: 100%;         /* força 100% da largura do #root */
+  padding: 2rem;       /*Espaço interno*/
+  box-sizing: border-box; /* para o padding não “estourar” a largura */
+}
+
+/* Classes de tema */
+.light-theme {
+  background-color: var(--light-bg);
+  color: var(--light-text);
+}
+
+.dark-theme {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+/* Estilos do cabeçalho */
+.header {
+  display: flex;
+  justify-content: space-between; /* Alinhamento horizontal */
+  align-items: center;            /* Alinhamento vertical */
+  margin-bottom: 2rem;            /* Espaço abaixo do cabeçalho */
+}
+
+/* Estilos do dashboard */
+.dashboard {
+  width: 100%;                        /* força 100% da largura do #root */
+  background: var(--light-secondary); /* Cor de fundo no tema claro */
+  border-radius: 8px;               /* Bordas arredondadas */
+  padding: 1.5rem;                  /* Espaçamento interno */
+  margin-bottom: 2rem;              /* Espaço entre dashboards */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+/* Override para tema escuro no dashboard */
+.dark-theme .dashboard {
+  background: var(--dark-secondary);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Sombra mais visível no escuro */
+}
+
+/* Estilos dos itens de tarefa */
+.todo-item {
+  display: flex;
+  justify-content: space-between; /* Espaço entre texto e botão */
+  align-items: center;            /* Alinhamento vertical */
+  padding: 0.8rem 1rem;           /* Espaçamento interno */
+  margin: 0.5rem 0;               /* Margem entre itens */
+  border-radius: 4px;             /* Bordas levemente arredondadas */
+  background-color: white;        /* Fundo branco no tema claro */
+}
+
+/* Estilos para tema escuro nos itens */
+.dark-theme .todo-item {
+  background-color: #2d2d2d;      /* Fundo mais escuro */
+}
+
+/* Estilo quando a tarefa está concluída */
+.todo-item.completed {
+  background-color: #e8f5e9;      /* Verde muito claro para concluídos */
+}
+
+/* Override para tema escuro em tarefas concluídas */
+.dark-theme .todo-item.completed {
+  background-color: #1b5e20;      /* Verde escuro para contraste */
+}
+
+/* Estilos base para botões */
+button {
+  padding: 0.5rem 1rem;     /* Espaçamento interno */
+  border: none;             /* Sem borda */
+  border-radius: 4px;       /* Bordas arredondadas */
+  cursor: pointer;          /* Cursor de ponteiro */
+  font-weight: bold;        /* Texto em negrito */
+}
+
+/* Estilo específico para botão de concluir */
+.btn-complete {
+  background-color: var(--light-primary); /* Verde do tema claro */
+  color: white;                           /* Texto branco */
+}
+
+/* Estilo específico para botão de desfazer */
+.btn-undo {
+  background-color: #ff9800;              /* Laranja */
+  color: white;
+}
+
+/* Estilo para botão de alternar tema */
+.theme-toggle {
+  background-color: transparent; /* Fundo transparente */
+  border: 1px solid currentColor; /* Borda com cor atual do texto */
+  color: inherit;                /* Herda a cor do texto */
+}

@@ -1,6 +1,12 @@
 const Conteiner = (props) => {
-    return (
-      <div style={{
+  return (
+    <div
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+        const cardTitle = e.dataTransfer.getData("text/plain");
+        alert(`Card solto na coluna ${props.titulo}: ${cardTitle}`);
+      }}
+      style={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -11,25 +17,32 @@ const Conteiner = (props) => {
         boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
         background: "#fff",
         margin: "8px",
-      }}>
-        <h1 style={{
+      }}
+    >
+      <h1
+        style={{
           textAlign: "center",
           margin: 0,
           padding: "16px",
           background: "#f0f0f0",
           fontSize: "18px",
           borderBottom: "1px solid #ddd",
-        }}>{props.titulo}</h1>
-        <div
-          style={{
-            backgroundColor: props.backgroundColor,
-            flex: 1,
-            padding: '20px',
-            borderRadius: "0 0 12px 12px",
-          }}
-        ></div>
+        }}
+      >
+        {props.titulo}
+      </h1>
+      <div
+        style={{
+          backgroundColor: props.backgroundColor,
+          flex: 1,
+          padding: "20px",
+          borderRadius: "0 0 12px 12px",
+        }}
+      >
+        {props.children}
       </div>
-    );
-  };
-  
-  export default Conteiner;
+    </div>
+  );
+};
+
+export default Conteiner;

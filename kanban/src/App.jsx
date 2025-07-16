@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Conteiner from './components/Conteiner';
+import Card from './components/Card';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        width: "100vw",
+        margin: 0,
+        padding: "16px",
+        background: "#eaeaea",
+        gap: "16px",
+        boxSizing: "border-box",
+      }}
+    >
+      <Conteiner titulo="Concluída" backgroundColor="green">
+        <Card titulo="Tarefa 1" descricao="Descrição da tarefa 1." />
+      </Conteiner>
+      <Conteiner titulo="Pendente" backgroundColor="orange">
+        <Card titulo="Tarefa 2" descricao="Descrição da tarefa 2." />
+      </Conteiner>
+      <Conteiner titulo="Não-concluída" backgroundColor="red" />
+    </div>
+  );
 }
 
-export default App
+export default App;

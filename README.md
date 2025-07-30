@@ -317,14 +317,15 @@ app.add_middleware(
 )
 
 # Nosso "banco de dados" de macacos (simples, só em memória)
-macacos_da_floresta = [
-    {"id": 1, "nome": "Chico"},
-    {"id": 2, "nome": "Caco"},
+macacos_da_floresta: List[Macaco] = [
+  Macaco(id=1, nome="Chico")
+  Macaco(id=2, nome="Caco")
 ]
 next_id = 3
 
 # Modelo para o novo macaco que vamos receber
 class Macaco(BaseModel):
+    id: int
     nome: str
 
 @app.get("/macacos") # Agora para listar macacos
@@ -334,7 +335,7 @@ async def get_macacos():
 @app.post("/macacos") # Novo endpoint para adicionar macacos!
 async def add_macaco(novo_macaco: Macaco): # Espera um objeto Macaco
     global next_id # Para poder modificar a variável global
-    macaco_com_id = {"id": next_id, "nome": novo_macaco.nome}
+    macaco_com_id = Macaco(id=next_id, nome=novo_macaco.nome)
     macacos_da_floresta.append(macaco_com_id)
     next_id += 1
     return macaco_com_id # Retorna o macaco adicionado com o ID

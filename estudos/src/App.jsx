@@ -1,100 +1,131 @@
-import {useEffect, useState} from 'react'
-import Arquivo from "./components/Arquivo.jsx";
-import ListaNomes from "./components/ListaNomes.jsx";
-import './App.css'
+// App.jsx (Refatorado!)
+
+import { useEffect, useState } from 'react';
+// Importa os novos componentes
+import UserList from './components/UserList.jsx';
+import FilteredUserLists from './components/FilteredUserLists.jsx';
+import AddUserForm from './components/AddUserForm.jsx';
+import './App.css';
 
 function App() {
-  const [usuarios, setUsuario] = useState([]);
-  const [carregado, setCarregado] = useState(true);
-  const [erro, setErro] = useState(null);
-  const usuariosEngenheiros = usuarios.filter(usuario => usuario.profissao === 'Engenharia');
-  const usuariosDesigners = usuarios.filter(usuario => usuario.profissao === 'Design');
-  const usuariosDesenvolvedores = usuarios.filter(usuario => usuario.profissao === 'Desenvolvimento');
+    const [usuarios, setUsuarios] = useState([]);
+    const [nome, setNome] = useState('');
+    const [profissao, setProfissao] = useState('');
+    const [carregado, setCarregado] = useState(true);
+    const [erro, setErro] = useState(null);
+    const [enviado, setEnviado] = useState(false);
+    const [mensagemFormulario, setMensagemFormulario] = useState('');
 
-  useEffect(() => {
-      setCarregado(true)
-      setErro(null);
+    const usuariosEngenheiros = usuarios.filter(usuario => usuario.profissao === 'Engenharia');
+    const usuariosDesigners = usuarios.filter(usuario => usuario.profissao === 'Design');
+    const usuariosDesenvolvedores = usuarios.filter(usuario => usuario.profissao === 'Desenvolvimento');
 
-      fetch('http://localhost:8000/usuarios')
-        .then(resposta => {
+    const buscarUsuarios = async () => {
+        setCarregado(true);
+        setErro(null);
+
+        try {
+            const resposta = await fetch('http://localhost:8000/usuarios');
             if (!resposta.ok) {
-                throw new Error('Erro na busca!')
+                throw new Error('Não consegui buscar ninguém!');
             }
-            return resposta.json();
-        })
-        .then(dados => {
-            setUsuario(dados);
-        })
-          .catch(problema => {
-              console.error("Erro na busca!" + problema);
-              setErro(("Vish, deu zebra!" + problema));
-          }).finally(() =>{
-              setCarregado(false);
-          })
+            const dados = await resposta.json();
+            setUsuarios(dados);
+        } catch (problema) {
+            console.error('Erro ao buscar usuários: ', problema);
+            setErro('Vish, deu zebra ao buscar! ' + problema.message);
+        } finally {
+            setCarregado(false);
+        }
+    };
 
-  }, [])
-  if (carregado) {
-      return <div>Carregando nomes...</div>
-  }  
-  
-  if (erro) {
-      return <div style={{color: 'red'}}>{erro}</div>
-  }
-  
-  return (
-    <>
-      <div className="App">
-          <h1>Gerenciador de Nome</h1>
-          {usuarios.length === 0 ? (
-              <p>Nenhum nome...</p>
-          ) : (
-              <ul>
-                  <div style={{backgroundColor: "blue"}}>
-                      <p>Todos os usuários</p>
-                      {usuarios.map(usuario => (
-                          <li key={usuario.id}>
-                              {usuario.nome} (Profissão: {usuario.profissao})
-                          </li>
-                      ))}
-                  </div>
+    useEffect(() => {
+        buscarUsuarios();
+    }, []);
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setMensagemFormulario('');
 
-                  <div style={{backgroundColor: "gray"}}>
-                      <p>Engenheiros</p>
-                        {usuariosEngenheiros.map(engenheiro => (
-                            <li key={engenheiro.id}>
-                                {engenheiro.nome}
-                            </li>
-                        ))}
-                  </div>
+        if (!nome.trim() || !profissao.trim()) {
+            setMensagemFormulario('Por favor, digite nome e profissão do usuário!');
+            return;
+        }
 
-                  <div style={{backgroundColor: "red"}}>
-                      <p>Desenvolvedores</p>
-                      {usuariosDesenvolvedores.map(desenvolvedor => (
-                          <li key={desenvolvedor.id}>
-                              {desenvolvedor.nome}
-                          </li>
-                      ))}
-                  </div>
+        setEnviado(true);
+        setErro(null);
 
-                  <div style={{backgroundColor: "green"}}>
-                      <p>Designers</p>
-                      {usuariosDesigners.map(designer => (
-                          <li key={designer.id}>
-                              {designer.nome}
-                          </li>
-                      ))}
-                  </div>
+        try {
+            const resposta = await fetch('http://localhost:8000/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome: nome, profissao: profissao }),
+            });
 
+            if (!resposta.ok) {
+                throw new Error('Não consegui salvar novo usuário!');
+            }
 
+            const usuarioAdd = await resposta.json();
+            console.log('Usuário adicionado com sucesso!', usuarioAdd);
+            setMensagemFormulario('Usuário adicionado com sucesso!');
 
-              </ul>
+            await buscarUsuarios();
+            setNome('');
+            setProfissao('');
+        } catch (problema) {
+            console.error('Erro ao adicionar usuário: ', problema);
+            setErro('Vish, deu zebra ao adicionar! ' + problema.message);
+            setMensagemFormulario('Erro ao adicionar usuário: ' + problema.message);
+        } finally {
+            setEnviado(false);
+        }
+    };
 
+    if (carregado) {
+        return <div>Carregando nomes...</div>;
+    }
 
-          )}
-      </div>
-    </>
-  )
+    if (erro) {
+        return <div style={{ color: 'red' }}>{erro}</div>;
+    }
+
+    return (
+        <>
+            <div className="App">
+                <h1>Gerenciador de Usuários</h1>
+
+                {/* Componente para a lista de todos os usuários */}
+                <UserList
+                    title="Todos os Usuários"
+                    users={usuarios}
+                    backgroundColor="blue"
+                />
+
+                {/* Componente para as listas filtradas */}
+                <FilteredUserLists
+                    engenheiros={usuariosEngenheiros}
+                    desenvolvedores={usuariosDesenvolvedores}
+                    designers={usuariosDesigners}
+                />
+
+                <hr style={{ margin: '20px 0' }} />
+
+                {/* Componente para o formulário de adição */}
+                <AddUserForm
+                    nome={nome}
+                    profissao={profissao}
+                    enviado={enviado}
+                    mensagemFormulario={mensagemFormulario}
+                    onNomeChange={(e) => setNome(e.target.value)}
+                    onProfissaoChange={(e) => setProfissao(e.target.value)}
+                    onSubmit={handleSubmit}
+                />
+            </div>
+        </>
+    );
 }
 
-export default App
+export default App;

@@ -17,7 +17,7 @@ function App() {
   // 'mensagemFormulario' guarda mensagens de feedback para o usuário sobre o formulário (sucesso/erro).
   const [mensagemFormulario, setMensagemFormulario] = useState('');
 
-  const buscarUsuarios = async () => {
+  const buscarAlbum = async () => {
     // Marca que estamos carregando e limpa qualquer erro anterior.
     setCarregado(true);
     setErro(null);
@@ -32,7 +32,7 @@ function App() {
       // Converte a resposta para JSON (os dados que o servidor enviou).
       const dados = await resposta.json();
       // Atualiza o estado 'usuarios' com os dados recebidos.
-      setUsuarios(dados);
+      setAlbum(dados);
     } catch (problema) {
       // Se der algum problema na requisição, mostra no console e atualiza o estado de erro.
       console.error('Erro ao buscar usuários: ', problema);
@@ -44,7 +44,7 @@ function App() {
   };
 
 useEffect(() => {
-  buscarUsuarios(); // Chama a função para buscar os usuários assim que o app carrega.
+  buscarAlbum(); // Chama a função para buscar os usuários assim que o app carrega.
 }, []);
 
   return (
